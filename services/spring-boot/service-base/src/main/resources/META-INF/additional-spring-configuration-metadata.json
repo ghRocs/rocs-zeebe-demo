@@ -1,0 +1,37 @@
+{
+  "properties": [
+    {
+      "name": "zeebe.gateway.address",
+      "type": "java.lang.String",
+      "defaultValue": null,
+      "description": "连接Zeebe集群的网关地址."
+    },
+    {
+      "name": "enableDeploymentRunner",
+      "type": "java.lang.Boolean",
+      "defaultValue": false,
+      "description": "在应用程序启动过程中执行部署流程资源文件的开关."
+    },
+    {
+      "name": "classPathResourceDeployment",
+      "type": "java.lang.String",
+      "defaultValue": "processes/purchase.bpmn",
+      "description": "流程资源文件所在的Classpath."
+    }
+  ],
+  "hints": [
+    {
+      "name": "enableDeploymentRunner",
+      "values": [
+        {
+          "value": true,
+          "description": "开启."
+        },
+        {
+          "value": false,
+          "description": "关闭."
+        }
+      ]
+    }
+  ]
+}

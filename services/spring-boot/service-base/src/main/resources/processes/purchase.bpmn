@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1a34zjs" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Zeebe Modeler" exporterVersion="0.11.0">
+  <bpmn:process id="process_purchase" name="Purchase Demo" isExecutable="true">
+    <bpmn:startEvent id="Event_s1xy23b" name="Start">
+      <bpmn:outgoing>Flow_1axvgy5</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_1axvgy5" sourceRef="Event_s1xy23b" targetRef="Activity_1d1wxns" />
+    <bpmn:serviceTask id="Activity_1d1wxns" name="Deduct Inventory">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="deduct-inventory" retries="3" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=commodity.code" target="commodityCode" />
+          <zeebe:input source="=commodityCount" target="count" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1axvgy5</bpmn:incoming>
+      <bpmn:outgoing>Flow_0tvxq1p</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0tvxq1p" sourceRef="Activity_1d1wxns" targetRef="Activity_0llytrl" />
+    <bpmn:serviceTask id="Activity_0llytrl" name="Create Order">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="create-order" retries="1" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=customer.id" target="customerId" />
+          <zeebe:input source="=commodity.code" target="commodityCode" />
+          <zeebe:input source="=commodityCount" target="count" />
+          <zeebe:output source="=order.orderNo" target="orderNo" />
+          <zeebe:output source="=order.totalAmount" target="totalAmount" />
+        </zeebe:ioMapping>
+        <zeebe:taskHeaders>
+          <zeebe:header key="NO_PREFIX" value="demo-" />
+        </zeebe:taskHeaders>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0tvxq1p</bpmn:incoming>
+      <bpmn:outgoing>Flow_0w10mye</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0w10mye" sourceRef="Activity_0llytrl" targetRef="Activity_1fokqq2" />
+    <bpmn:serviceTask id="Activity_1fokqq2" name="Debit Account">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="debit-account" retries="3" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=customer.id" target="userId" />
+          <zeebe:input source="=totalAmount" target="amount" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0w10mye</bpmn:incoming>
+      <bpmn:outgoing>Flow_0b7lkwz</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0b7lkwz" sourceRef="Activity_1fokqq2" targetRef="Gateway_1lub71a" />
+    <bpmn:exclusiveGateway id="Gateway_1lub71a" name="Is Virtual Commodity?" default="Flow_0kz4kde">
+      <bpmn:incoming>Flow_0b7lkwz</bpmn:incoming>
+      <bpmn:outgoing>Flow_0kz4kde</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0kigso5</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_0kz4kde" name="No" sourceRef="Gateway_1lub71a" targetRef="Activity_12wblyw" />
+    <bpmn:endEvent id="Event_17bn06q" name="End">
+      <bpmn:incoming>Flow_0kigso5</bpmn:incoming>
+      <bpmn:incoming>Flow_08824ii</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0kigso5" name="Yes" sourceRef="Gateway_1lub71a" targetRef="Event_17bn06q">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=commodity.isVirtual</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:serviceTask id="Activity_12wblyw" name="Ship Commodity">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="ship-commodity" retries="1" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=customer.address" target="address" />
+          <zeebe:input source="=commodity.code" target="commodityCode" />
+          <zeebe:input source="=commodityCount" target="count" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0kz4kde</bpmn:incoming>
+      <bpmn:outgoing>Flow_08824ii</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_08824ii" sourceRef="Activity_12wblyw" targetRef="Event_17bn06q" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="process_purchase">
+      <bpmndi:BPMNEdge id="Flow_08824ii_di" bpmnElement="Flow_08824ii">
+        <di:waypoint x="985" y="207" />
+        <di:waypoint x="1042" y="207" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0kigso5_di" bpmnElement="Flow_0kigso5">
+        <di:waypoint x="795" y="182" />
+        <di:waypoint x="795" y="100" />
+        <di:waypoint x="1060" y="100" />
+        <di:waypoint x="1060" y="189" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="919" y="82" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0kz4kde_di" bpmnElement="Flow_0kz4kde">
+        <di:waypoint x="820" y="207" />
+        <di:waypoint x="885" y="207" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="846" y="189" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0b7lkwz_di" bpmnElement="Flow_0b7lkwz">
+        <di:waypoint x="705" y="207" />
+        <di:waypoint x="770" y="207" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0w10mye_di" bpmnElement="Flow_0w10mye">
+        <di:waypoint x="540" y="207" />
+        <di:waypoint x="605" y="207" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0tvxq1p_di" bpmnElement="Flow_0tvxq1p">
+        <di:waypoint x="375" y="207" />
+        <di:waypoint x="440" y="207" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1axvgy5_di" bpmnElement="Flow_1axvgy5">
+        <di:waypoint x="215" y="207" />
+        <di:waypoint x="275" y="207" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="Event_s1xy23b">
+        <dc:Bounds x="179" y="189" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="185" y="232" width="24" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_17bn06q_di" bpmnElement="Event_17bn06q">
+        <dc:Bounds x="1042" y="189" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1050" y="235" width="20" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0girwug_di" bpmnElement="Activity_1d1wxns">
+        <dc:Bounds x="275" y="167" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0onbww4_di" bpmnElement="Activity_0llytrl">
+        <dc:Bounds x="440" y="167" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1txp13u_di" bpmnElement="Activity_1fokqq2">
+        <dc:Bounds x="605" y="167" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1a3n86f_di" bpmnElement="Gateway_1lub71a" isMarkerVisible="true">
+        <dc:Bounds x="770" y="182" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="764" y="242" width="62" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_161udf2_di" bpmnElement="Activity_12wblyw">
+        <dc:Bounds x="885" y="167" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

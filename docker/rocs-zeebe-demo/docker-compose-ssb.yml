@@ -1,0 +1,48 @@
+version: "2"
+services:
+  spring-boot-zeebe-demo-shipping-service:
+    image: spring-boot-zeebe-demo-shipping-service:0.1-SNAPSHOT
+    container_name: shipping-service_spring-boot
+    environment:
+      - ZEEBE.GATEWAY.ADDRESS=zeebe:26500
+    networks:
+      - rzd_network
+    tty: true
+  spring-boot-zeebe-demo-account-service:
+    image: spring-boot-zeebe-demo-account-service:0.1-SNAPSHOT
+    container_name: account-service_spring-boot
+    environment:
+      - ZEEBE.GATEWAY.ADDRESS=zeebe:26500
+    networks:
+      - rzd_network
+    tty: true
+  spring-boot-zeebe-demo-order-service:
+    image: spring-boot-zeebe-demo-order-service:0.1-SNAPSHOT
+    container_name: order-service_spring-boot
+    environment:
+      - ZEEBE.GATEWAY.ADDRESS=zeebe:26500
+    networks:
+      - rzd_network
+    tty: true
+  spring-boot-zeebe-demo-inventory-service:
+    image: spring-boot-zeebe-demo-inventory-service:0.1-SNAPSHOT
+    container_name: inventory-service_spring-boot
+    environment:
+      - ZEEBE.GATEWAY.ADDRESS=zeebe:26500
+    networks:
+      - rzd_network
+    tty: true
+  spring-boot-zeebe-demo-business-service:
+    image: spring-boot-zeebe-demo-business-service:0.1-SNAPSHOT
+    container_name: business-service_spring-boot
+    environment:
+      - ZEEBE.GATEWAY.ADDRESS=zeebe:26500
+    ports:
+      - 18080:18080
+    networks:
+      - rzd_network
+    tty: true
+
+networks:
+  rzd_network:
+    driver: bridge

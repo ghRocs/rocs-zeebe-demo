@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.github.ghrocs.zeebe.demo.base.config.ZeebeClientAutoConfiguration,\
+  com.github.ghrocs.zeebe.demo.base.config.BaseApplicationRunner
