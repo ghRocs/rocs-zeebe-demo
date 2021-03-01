@@ -9,7 +9,7 @@
     <packaging>pom</packaging>
     <name>Spring Boot Zeebe Demo Services</name>
     <modules>
-        <!--<module>service-base</module>-->
+        <module>service-base</module>
         <module>business-service</module>
         <module>inventory-service</module>
         <module>order-service</module>

@@ -56,7 +56,7 @@ public class CreateOrderZeebeJobWorker implements JobHandler {
     orderBO.setOrderNo(numberPrefix + orderBO.getOrderNo());
     log.debug("流程运用单号:{}", orderBO.getOrderNo());
     Map<String, Object> outputVariablesMap =
-        new HashMap<>() {
+        new HashMap() {
           {
             put("order", orderBO);
           }

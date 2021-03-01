@@ -22,7 +22,7 @@ public class GlobalExceptionHandler {
   public ResponseEntity defaultException(DefaultException defaultException) {
     log.error("Caught a DefaultException,", defaultException);
     Map<String, Object> result =
-        new HashMap<>() {
+        new HashMap() {
           {
             put("timestamp", Timestamp.from(Instant.now()));
             put("status", -1);

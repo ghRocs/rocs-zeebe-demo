@@ -1,8 +1,7 @@
-## **rocs-zeebe-demo**	Zeebe入门实战
+# rocs-zeebe-demo  Zeebe 入门实战
 
 
-
-#### 项目背景介绍
+## 项目背景介绍
 
 启动该项目希望可以帮助更多社区Zeebe初学者能够快速入门，并以模拟电商在线交易系统中顾客购买商品的下单业务流程作为Zeebe企业级实战的项目原型。
 
@@ -14,12 +13,13 @@
 
 - 如何集成Zeebe并使用Java、Spring Boot、JavaScript/TypeScript、Node.js、.NET、Go等等各种语言与各式框架来编写管理与适配程序进行流程控制和业务绑定。
 
-#### 软件技术方法栈
+## 软件技术方法栈
 
 - 领域驱动设计（DDD）
 - 图形化建模语言工具： BPMN  2.0，Zeebe Modeler v0.11.0
 - 分布式工作流引擎与编排框架：Zeebe 0.26.1
 - 事件驱动架构（EDA）
+- 编制型 Saga 模式
 - 安全授权机制与标准：OAuth 2.0
 - 基于 HTTP/2 和 Proto3 的 RPC 通讯框架：gRPC
 - (文档型)数据分析引擎：Elasticsearch 6.8.14
@@ -33,7 +33,7 @@
 | services/spring-boot | Java 11 & OpenJDK 11，Spring Boot 2.4.3，Maven 3.6；Swagger 2.0，SpringFox 3.0.0； | Zeebe Client Java 0.26.0 |
 |                      |                                                              |                          |
 
-#### 附演示效果图
+## 附演示效果图
 
 ![从本地Docker启动项目环境](docs/img/running_from_docker.png)
 
