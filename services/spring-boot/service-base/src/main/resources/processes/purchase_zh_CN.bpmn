@@ -54,10 +54,9 @@
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="Flow_0kz4kde" name="否" sourceRef="Gateway_1lub71a" targetRef="Activity_12wblyw" />
     <bpmn:endEvent id="Event_17bn06q" name="结束">
-      <bpmn:incoming>Flow_0kigso5</bpmn:incoming>
-      <bpmn:incoming>Flow_08824ii</bpmn:incoming>
+      <bpmn:incoming>Flow_0epd8yd</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_0kigso5" name="是" sourceRef="Gateway_1lub71a" targetRef="Event_17bn06q">
+    <bpmn:sequenceFlow id="Flow_0kigso5" name="是" sourceRef="Gateway_1lub71a" targetRef="Activity_1e05la1">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=commodity.isVirtual</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:serviceTask id="Activity_12wblyw" name="运送货件">
@@ -72,21 +71,41 @@
       <bpmn:incoming>Flow_0kz4kde</bpmn:incoming>
       <bpmn:outgoing>Flow_08824ii</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="Flow_08824ii" sourceRef="Activity_12wblyw" targetRef="Event_17bn06q" />
+    <bpmn:sequenceFlow id="Flow_08824ii" sourceRef="Activity_12wblyw" targetRef="Activity_1e05la1" />
+    <bpmn:receiveTask id="Activity_1e05la1" name="顾客(签)收" messageRef="Message_1qokgo8">
+      <bpmn:extensionElements>
+        <zeebe:ioMapping>
+          <zeebe:output source="= if (signer = null or matches(signer, &#34;\\s*&#34;)) then customer.name else signer" target="signer" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_08824ii</bpmn:incoming>
+      <bpmn:incoming>Flow_0kigso5</bpmn:incoming>
+      <bpmn:outgoing>Flow_0epd8yd</bpmn:outgoing>
+    </bpmn:receiveTask>
+    <bpmn:sequenceFlow id="Flow_0epd8yd" sourceRef="Activity_1e05la1" targetRef="Event_17bn06q" />
   </bpmn:process>
+  <bpmn:message id="Message_1qokgo8" name="Order delivered">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=orderNo" />
+    </bpmn:extensionElements>
+  </bpmn:message>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="process_purchase">
+      <bpmndi:BPMNEdge id="Flow_0epd8yd_di" bpmnElement="Flow_0epd8yd">
+        <di:waypoint x="1160" y="207" />
+        <di:waypoint x="1222" y="207" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08824ii_di" bpmnElement="Flow_08824ii">
         <di:waypoint x="985" y="207" />
-        <di:waypoint x="1042" y="207" />
+        <di:waypoint x="1060" y="207" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0kigso5_di" bpmnElement="Flow_0kigso5">
         <di:waypoint x="795" y="182" />
         <di:waypoint x="795" y="100" />
-        <di:waypoint x="1060" y="100" />
-        <di:waypoint x="1060" y="189" />
+        <di:waypoint x="1110" y="100" />
+        <di:waypoint x="1110" y="167" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="922" y="82" width="11" height="14" />
+          <dc:Bounds x="947" y="82" width="11" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0kz4kde_di" bpmnElement="Flow_0kz4kde">
@@ -112,6 +131,12 @@
         <di:waypoint x="215" y="207" />
         <di:waypoint x="275" y="207" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="Event_s1xy23b">
+        <dc:Bounds x="179" y="189" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="187" y="232" width="22" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0girwug_di" bpmnElement="Activity_1d1wxns">
         <dc:Bounds x="275" y="167" width="100" height="80" />
       </bpmndi:BPMNShape>
@@ -121,26 +146,23 @@
       <bpmndi:BPMNShape id="Activity_1txp13u_di" bpmnElement="Activity_1fokqq2">
         <dc:Bounds x="605" y="167" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_161udf2_di" bpmnElement="Activity_12wblyw">
-        <dc:Bounds x="885" y="167" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_1a3n86f_di" bpmnElement="Gateway_1lub71a" isMarkerVisible="true">
         <dc:Bounds x="770" y="182" width="50" height="50" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="757" y="242" width="77" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="Event_s1xy23b">
-        <dc:Bounds x="179" y="189" width="36" height="36" />
+      <bpmndi:BPMNShape id="Event_17bn06q_di" bpmnElement="Event_17bn06q">
+        <dc:Bounds x="1222" y="189" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="187" y="232" width="22" height="14" />
+          <dc:Bounds x="1229" y="232" width="22" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_17bn06q_di" bpmnElement="Event_17bn06q">
-        <dc:Bounds x="1042" y="189" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1050" y="232" width="22" height="14" />
-        </bpmndi:BPMNLabel>
+      <bpmndi:BPMNShape id="Activity_161udf2_di" bpmnElement="Activity_12wblyw">
+        <dc:Bounds x="885" y="167" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_12026ok_di" bpmnElement="Activity_1e05la1">
+        <dc:Bounds x="1060" y="167" width="100" height="80" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

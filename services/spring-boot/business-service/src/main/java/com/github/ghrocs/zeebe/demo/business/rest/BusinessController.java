@@ -1,5 +1,6 @@
 package com.github.ghrocs.zeebe.demo.business.rest;
 
+import com.github.ghrocs.zeebe.demo.base.constant.PurchaseConst;
 import com.github.ghrocs.zeebe.demo.base.domain.CommodityDO;
 import com.github.ghrocs.zeebe.demo.base.domain.CustomerDO;
 import com.github.ghrocs.zeebe.demo.base.domain.PurchaseDTO;
@@ -8,6 +9,7 @@ import com.github.ghrocs.zeebe.demo.base.repository.CommodityRepository;
 import com.github.ghrocs.zeebe.demo.base.repository.CustomerRepository;
 import com.github.ghrocs.zeebe.demo.business.rest.vo.BizPurchaseReqVO;
 import com.github.ghrocs.zeebe.demo.business.rest.vo.BizPurchaseRespVO;
+import com.github.ghrocs.zeebe.demo.business.rest.vo.BizReceiptReqVO;
 import com.github.ghrocs.zeebe.demo.business.service.ZeebeWorkflowService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -21,6 +23,8 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.Collections;
+import java.util.Map;
 import java.util.UUID;
 
 /** @author Rocs Zhang */
@@ -30,16 +34,19 @@ import java.util.UUID;
 @RequestMapping("/api/business")
 public class BusinessController {
 
-  // 对应流程定义Bpmn:process的id内容
-  private static final String BPMN_PROCESS_ID = "process_purchase";
-
   // 在创建流程实例时是否等待执行结果返回的开关
   @Value("${enableCreateWorkflowInstanceWithExecutionResult:false}")
   private Boolean enableCreateWorkflowInstanceWithExecutionResult;
 
+  // 消息的生存时间(TTL)
+  @Value("${zeebe.messaging.ttlSeconds:#{null}}")
+  private Long ttlSeconds;
+
   @Autowired private ZeebeWorkflowService<PurchaseDTO, PurchaseDTO> workflowService;
 
-  @ApiOperation(value = "顾客购买商品", notes = "通过执行相应流程" + BPMN_PROCESS_ID + "语义内容进行模拟顾客购买商品下单业务逻辑流程")
+  @ApiOperation(
+      value = "顾客购买商品",
+      notes = "通过执行相应流程" + PurchaseConst.BPMN_PROCESS_ID + "语义内容进行模拟顾客购买商品下单业务逻辑流程")
   @PostMapping("/purchase")
   public ResponseEntity<BizPurchaseRespVO> purchase(
       @Validated @ModelAttribute BizPurchaseReqVO bizPurchaseReqVO) {
@@ -53,12 +60,13 @@ public class BusinessController {
     log.info(
         "Create a Workflow instance with Variables:{} for the latest Process#{}",
         purchaseDTO,
-        BPMN_PROCESS_ID);
+        PurchaseConst.BPMN_PROCESS_ID);
     if (enableCreateWorkflowInstanceWithExecutionResult) {
       workflowService.createInstanceWithResult(
-          BPMN_PROCESS_ID, purchaseDTO, wfKeyResultBuilder, purchaseResult);
+          PurchaseConst.BPMN_PROCESS_ID, purchaseDTO, wfKeyResultBuilder, purchaseResult);
     } else {
-      workflowService.createInstance(BPMN_PROCESS_ID, purchaseDTO, wfKeyResultBuilder);
+      workflowService.createInstance(
+          PurchaseConst.BPMN_PROCESS_ID, purchaseDTO, wfKeyResultBuilder);
     }
     BizPurchaseRespVO bizPurchaseRespVO =
         bizPurchaseRespVOBuilder
@@ -71,7 +79,7 @@ public class BusinessController {
 
   @ApiOperation(
       value = "顾客试购商品",
-      notes = "仅完成对顾客购买商品进行价格试算的逻辑并返回结果，不会创建相应流程" + BPMN_PROCESS_ID + "的实例")
+      notes = "仅完成对顾客购买商品进行价格试算的逻辑并返回结果，不会创建相应流程" + PurchaseConst.BPMN_PROCESS_ID + "的实例")
   @RequestMapping(
       value = "/purchase/trial",
       method = {RequestMethod.GET, RequestMethod.POST})
@@ -90,10 +98,32 @@ public class BusinessController {
     BizPurchaseRespVO bizPurchaseRespVO =
         bizPurchaseRespVOBuilder
             .traceId(purchaseDTO.getTraceId())
-            .wfInstance(BPMN_PROCESS_ID + "-{INT}-{INT}")
+            .wfInstance(PurchaseConst.BPMN_PROCESS_ID + "-{INT}-{INT}")
             .e2eResult(purchaseDTO)
             .build();
     return ResponseEntity.ok(bizPurchaseRespVO);
+  }
+
+  @ApiOperation(
+      value = "顾客(签)收",
+      notes = "通过发布-订阅相应" + PurchaseConst.MESSAGE_NAME_ORDER_DELIVERED + "消息进行模拟顾客(签)收业务逻辑")
+  @PostMapping("/receipt")
+  public ResponseEntity receipt(@Validated @ModelAttribute BizReceiptReqVO bizReceiptReqVO) {
+    log.info("Requested {} to await a message upon receipt of delivery", bizReceiptReqVO);
+    // TODO: do background verification for the 'orderNo' parameter
+    Map<String, Object> variablesMap =
+        Collections.singletonMap("signer", bizReceiptReqVO.getSigner());
+    log.info(
+        "Send one {} message with Variables:{} to the workflow instances with the correlation key#{}",
+        PurchaseConst.MESSAGE_NAME_ORDER_DELIVERED,
+        variablesMap,
+        bizReceiptReqVO.getOrderNo());
+    workflowService.publishMessage(
+        PurchaseConst.MESSAGE_NAME_ORDER_DELIVERED,
+        bizReceiptReqVO.getOrderNo(),
+        variablesMap,
+        ttlSeconds);
+    return ResponseEntity.ok().build();
   }
 
   private PurchaseDTO doBackgroundVerificationForPurchaseDTO(BizPurchaseReqVO bizPurchaseReqVO) {

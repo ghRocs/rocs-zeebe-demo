@@ -18,6 +18,7 @@ public class PurchaseDTO extends TraceableDTO {
 
   private BigDecimal totalAmount;
   private String orderNo;
+  private String signer;
 
   public PurchaseDTO(CustomerDO customer, CommodityDO commodity, Integer commodityCount) {
     this.customer = customer;

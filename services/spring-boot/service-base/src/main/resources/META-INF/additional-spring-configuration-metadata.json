@@ -7,6 +7,12 @@
       "description": "连接Zeebe集群的网关地址."
     },
     {
+      "name": "zeebe.client.numExecutionThreads",
+      "type": "java.lang.Integer",
+      "defaultValue": 1,
+      "description": "为执行Job开启线程的数量."
+    },
+    {
       "name": "enableDeploymentRunner",
       "type": "java.lang.Boolean",
       "defaultValue": false,
