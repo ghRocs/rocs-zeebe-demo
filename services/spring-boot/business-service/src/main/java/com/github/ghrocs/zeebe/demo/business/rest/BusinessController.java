@@ -9,7 +9,7 @@ import com.github.ghrocs.zeebe.demo.base.repository.CommodityRepository;
 import com.github.ghrocs.zeebe.demo.base.repository.CustomerRepository;
 import com.github.ghrocs.zeebe.demo.business.rest.vo.BizPurchaseReqVO;
 import com.github.ghrocs.zeebe.demo.business.rest.vo.BizPurchaseRespVO;
-import com.github.ghrocs.zeebe.demo.business.rest.vo.BizReceiptReqVO;
+import com.github.ghrocs.zeebe.demo.business.rest.vo.BizReceiptViaTraceIdReqVO;
 import com.github.ghrocs.zeebe.demo.business.service.ZeebeWorkflowService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -39,7 +39,7 @@ public class BusinessController {
   private Boolean enableCreateWorkflowInstanceWithExecutionResult;
 
   // 消息的生存时间(TTL)
-  @Value("${zeebe.messaging.ttlSeconds:#{null}}")
+  @Value("${zeebe.message.buffering.ttlSeconds:#{null}}")
   private Long ttlSeconds;
 
   @Autowired private ZeebeWorkflowService<PurchaseDTO, PurchaseDTO> workflowService;
@@ -106,21 +106,24 @@ public class BusinessController {
 
   @ApiOperation(
       value = "顾客(签)收",
-      notes = "通过发布-订阅相应" + PurchaseConst.MESSAGE_NAME_ORDER_DELIVERED + "消息进行模拟顾客(签)收业务逻辑")
+      notes = "通过发布-订阅相应" + PurchaseConst.MESSAGE_NAME_TRACE_DELIVERED + "消息进行模拟顾客(签)收业务逻辑")
   @PostMapping("/receipt")
-  public ResponseEntity receipt(@Validated @ModelAttribute BizReceiptReqVO bizReceiptReqVO) {
-    log.info("Requested {} to await a message upon receipt of delivery", bizReceiptReqVO);
-    // TODO: do background verification for the 'orderNo' parameter
+  public ResponseEntity receipt(
+      @Validated @ModelAttribute BizReceiptViaTraceIdReqVO bizReceiptViaTraceIdReqVO) {
+    log.info("Requested {} to await a message upon receipt of delivery", bizReceiptViaTraceIdReqVO);
     Map<String, Object> variablesMap =
-        Collections.singletonMap("signer", bizReceiptReqVO.getSigner());
+        Collections.singletonMap("signer", bizReceiptViaTraceIdReqVO.getSigner());
     log.info(
         "Send one {} message with Variables:{} to the workflow instances with the correlation key#{}",
-        PurchaseConst.MESSAGE_NAME_ORDER_DELIVERED,
+        PurchaseConst.MESSAGE_NAME_TRACE_DELIVERED,
         variablesMap,
-        bizReceiptReqVO.getOrderNo());
+        bizReceiptViaTraceIdReqVO.getPurchaseTraceId());
     workflowService.publishMessage(
-        PurchaseConst.MESSAGE_NAME_ORDER_DELIVERED,
-        bizReceiptReqVO.getOrderNo(),
+        PurchaseConst.MESSAGE_NAME_TRACE_DELIVERED,
+        bizReceiptViaTraceIdReqVO.getPurchaseTraceId(),
+        customizeMessageIdentifier(
+            bizReceiptViaTraceIdReqVO.getPurchaseTraceId(),
+            PurchaseConst.MESSAGE_NAME_TRACE_DELIVERED),
         variablesMap,
         ttlSeconds);
     return ResponseEntity.ok().build();
@@ -139,5 +142,9 @@ public class BusinessController {
         new PurchaseDTO(customerDO, commodityDO, bizPurchaseReqVO.getCommodityCount());
     purchaseDTO.setTraceId(UUID.randomUUID().toString());
     return purchaseDTO;
+  }
+
+  private static String customizeMessageIdentifier(String uid, String name) {
+    return uid.concat("-").concat(name.toLowerCase().trim().replaceAll("\\s+", "-"));
   }
 }

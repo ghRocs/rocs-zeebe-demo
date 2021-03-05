@@ -72,10 +72,10 @@
       <bpmn:outgoing>Flow_08824ii</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_08824ii" sourceRef="Activity_12wblyw" targetRef="Activity_1e05la1" />
-    <bpmn:receiveTask id="Activity_1e05la1" name="顾客(签)收" messageRef="Message_1qokgo8">
+    <bpmn:receiveTask id="Activity_1e05la1" name="顾客(签)收" messageRef="Message_133e7zi">
       <bpmn:extensionElements>
         <zeebe:ioMapping>
-          <zeebe:output source="= if (signer = null or matches(signer, &#34;\\s*&#34;)) then customer.name else signer" target="signer" />
+          <zeebe:output source="= if (signer = null or matches(signer, &#34;\\s+&#34;)) then customer.name else signer" target="signer" />
         </zeebe:ioMapping>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_08824ii</bpmn:incoming>
@@ -87,6 +87,11 @@
   <bpmn:message id="Message_1qokgo8" name="Order delivered">
     <bpmn:extensionElements>
       <zeebe:subscription correlationKey="=orderNo" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmn:message id="Message_133e7zi" name="Trace delivered">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=traceId" />
     </bpmn:extensionElements>
   </bpmn:message>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">

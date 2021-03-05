@@ -9,11 +9,11 @@ import javax.validation.constraints.NotBlank;
 /** @author Rocs Zhang */
 @ApiModel
 @Data
-public class BizReceiptReqVO {
+public class BizReceiptViaTraceIdReqVO {
 
-  @ApiModelProperty(value = "订单编号", required = true, position = 0)
-  @NotBlank(message = "The 'orderNo' field can't be blank")
-  private String orderNo;
+  @ApiModelProperty(value = "下单时TraceID", required = true, position = 0)
+  @NotBlank(message = "The 'purchaseTraceId' field can't be blank")
+  private String purchaseTraceId;
 
   @ApiModelProperty(value = "签收人", notes = "缺省为本人签收", position = 1)
   private String signer;

@@ -9,6 +9,7 @@ import io.zeebe.client.api.response.WorkflowInstanceResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.time.Duration;
 import java.util.Map;
@@ -78,6 +79,7 @@ public class ZeebeWorkflowService<I, O> {
   public void publishMessage(
       String messageName,
       String correlationKey,
+      String messageId,
       Map<String, Object> variablesMap,
       Long ttlSeconds) {
     try {
@@ -87,6 +89,9 @@ public class ZeebeWorkflowService<I, O> {
               .messageName(messageName)
               .correlationKey(correlationKey)
               .variables(variablesMap);
+      if (StringUtils.hasLength(messageId)) {
+        step3.messageId(messageId);
+      }
       if (ttlSeconds != null) {
         step3.timeToLive(Duration.ofSeconds(ttlSeconds));
       }

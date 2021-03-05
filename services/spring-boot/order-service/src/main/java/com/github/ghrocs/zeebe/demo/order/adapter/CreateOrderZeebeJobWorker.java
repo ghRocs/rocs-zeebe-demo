@@ -43,7 +43,8 @@ public class CreateOrderZeebeJobWorker implements JobHandler {
             .jobType("create-order")
             .handler(this)
             .name("【Spring Boot Create Order】")
-            .timeout(Duration.ofMinutes(1L));
+            .timeout(Duration.ofMinutes(1L))
+            .pollInterval(Duration.ofSeconds(1L));
     if (maxJobsActive != null) {
       step3.maxJobsActive(maxJobsActive);
     }

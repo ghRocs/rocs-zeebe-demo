@@ -59,8 +59,8 @@ public class ShipCommodityZeebeJobWorker implements JobHandler {
       log.info("Job handler completed the Job#{}", job.getKey());
     } catch (DefaultException defaultException) {
       client
-          .newThrowErrorCommand(job.getKey())
-          .errorCode("WMS-0")
+          .newFailCommand(job.getKey())
+          .retries(0) // the number of remaining retries
           .errorMessage(defaultException.getMessage())
           .send()
           .join();
