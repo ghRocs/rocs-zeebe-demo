@@ -1,6 +1,7 @@
 package com.github.ghrocs.zeebe.demo.order.adapter;
 
 import com.github.ghrocs.zeebe.demo.base.constant.PurchaseConst;
+import com.github.ghrocs.zeebe.demo.base.util.JacksonUtils;
 import com.github.ghrocs.zeebe.demo.order.service.IOrderService;
 import com.github.ghrocs.zeebe.demo.order.service.bo.OrderBO;
 import io.zeebe.client.ZeebeClient;
@@ -73,6 +74,7 @@ public class CreateOrderZeebeJobWorker implements JobHandler {
             put("order", orderBO);
           }
         };
+    log.debug("variables:{}", JacksonUtils.obj2Json(outputVariablesMap));
     client.newCompleteCommand(job.getKey()).variables(outputVariablesMap).send().join();
     log.info("Job handler completed the Job#{}", job.getKey());
   }

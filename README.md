@@ -30,6 +30,7 @@
 
 | 模块                 | 语言框架版本                                                 | Zeebe 客户端             |
 | -------------------- | ------------------------------------------------------------ | ------------------------ |
+| services/CLI         |                                                              | Zeebe CLI client 0.26.0  |
 | services/spring-boot | Java 11 & OpenJDK 11，Spring Boot 2.4.3，Maven 3.6；Swagger 2.0，SpringFox 3.0.0； | Zeebe Client Java 0.26.0 |
 |                      |                                                              |                          |
 
@@ -43,7 +44,7 @@
 
 ![演示业务流程实例可视化效果](docs/img/visibility_process_instance.png)
 
-![演示业务流程实例出现故障节点](docs/img/overview_incidents_at_activity.png)
+![演示业务流程实例出现事故](docs/img/overview_incidents_at_activity.png)
 
-![故障节点具体问题列表](docs/img/list_incidents_at_activity.png)
+![事故列表详情](docs/img/list_incidents_at_activity.png)
 

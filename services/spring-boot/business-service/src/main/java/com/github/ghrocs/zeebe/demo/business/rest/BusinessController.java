@@ -7,6 +7,7 @@ import com.github.ghrocs.zeebe.demo.base.domain.PurchaseDTO;
 import com.github.ghrocs.zeebe.demo.base.exception.DefaultException;
 import com.github.ghrocs.zeebe.demo.base.repository.CommodityRepository;
 import com.github.ghrocs.zeebe.demo.base.repository.CustomerRepository;
+import com.github.ghrocs.zeebe.demo.base.util.JacksonUtils;
 import com.github.ghrocs.zeebe.demo.business.rest.vo.BizPurchaseReqVO;
 import com.github.ghrocs.zeebe.demo.business.rest.vo.BizPurchaseRespVO;
 import com.github.ghrocs.zeebe.demo.business.rest.vo.BizReceiptViaTraceIdReqVO;
@@ -59,7 +60,7 @@ public class BusinessController {
     bizPurchaseRespVOBuilder.timestamp(Timestamp.from(Instant.now()));
     log.info(
         "Create a Workflow instance with Variables:{} for the latest Process#{}",
-        purchaseDTO,
+        JacksonUtils.obj2Json(purchaseDTO),
         PurchaseConst.BPMN_PROCESS_ID);
     if (enableCreateWorkflowInstanceWithExecutionResult) {
       workflowService.createInstanceWithResult(
@@ -116,7 +117,7 @@ public class BusinessController {
     log.info(
         "Send one {} message with Variables:{} to the workflow instances with the correlation key#{}",
         PurchaseConst.MESSAGE_NAME_TRACE_DELIVERED,
-        variablesMap,
+        JacksonUtils.obj2Json(variablesMap),
         bizReceiptViaTraceIdReqVO.getPurchaseTraceId());
     workflowService.publishMessage(
         PurchaseConst.MESSAGE_NAME_TRACE_DELIVERED,
