@@ -15,6 +15,9 @@ public class ZeebeClientAutoConfiguration {
   @Value("${zeebe.gateway.address:#{null}}")
   private String gatewayAddress;
 
+  @Value("${zeebe.client.numExecutionThreads:1}")
+  private int numJobWorkerExecutionThreads;
+
   @Bean
   public ZeebeClient zeebeClient() {
     ZeebeClientBuilder clientBuilder = ZeebeClient.newClientBuilder();
@@ -22,7 +25,7 @@ public class ZeebeClientAutoConfiguration {
       clientBuilder.gatewayAddress(gatewayAddress);
     }
     // use an unsecured connection
-    clientBuilder.usePlaintext();
+    clientBuilder.usePlaintext().numJobWorkerExecutionThreads(numJobWorkerExecutionThreads);
     ZeebeClient client = clientBuilder.build();
     log.info("Connected to the zeebe cluster:{}", client.newTopologyRequest().send().join());
     return client;
