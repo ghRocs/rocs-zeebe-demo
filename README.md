@@ -42,6 +42,8 @@
 
 ![通过下单接口发起整个演示业务流程](docs/img/demo_business_apis.png)
 
+![使用zbctl工具模拟测试演示业务流程](docs/img/zbctl_command_line_interface.png)
+
 ![演示业务流程实例可视化效果](docs/img/visibility_process_instance.png)
 
 ![演示业务流程实例出现事故](docs/img/overview_incidents_at_activity.png)
