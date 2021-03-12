@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.github.ghrocs</groupId>
-        <artifactId>spring-boot-with-starter-demo-services</artifactId>
+        <artifactId>spring-boot-with-starter-zeebe-demo-services</artifactId>
         <version>0.1-SNAPSHOT</version>
     </parent>
     <artifactId>spring-boot-with-starter-zeebe-demo-business-service</artifactId>
@@ -14,6 +14,10 @@
         <start-class>com.github.ghrocs.zeebe.demo.business.SpringBootWithStarterZeebeDemoBusinessServiceApplication</start-class>
     </properties>
     <dependencies>
+        <dependency>
+            <groupId>com.github.ghrocs</groupId>
+            <artifactId>spring-boot-with-starter-zeebe-demo-service-common</artifactId>
+        </dependency>
         <dependency>
             <groupId>io.zeebe.spring</groupId>
             <artifactId>spring-zeebe-starter</artifactId>
@@ -30,16 +34,6 @@
             <groupId>io.springfox</groupId>
             <artifactId>springfox-boot-starter</artifactId>
             <version>3.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

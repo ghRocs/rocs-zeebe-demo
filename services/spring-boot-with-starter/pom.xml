@@ -3,10 +3,18 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.ghrocs</groupId>
-    <artifactId>spring-boot-with-starter-demo-services</artifactId>
+    <artifactId>spring-boot-with-starter-zeebe-demo-services</artifactId>
     <version>0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Spring Boot With Starter Zeebe Demo Services</name>
+    <modules>
+        <module>service-common</module>
+        <module>business-service</module>
+        <module>inventory-service</module>
+        <module>order-service</module>
+        <module>account-service</module>
+        <module>shipping-service</module>
+    </modules>
     <properties>
         <spring.boot.version>2.4.3</spring.boot.version>
         <spring.zeebe.starter.version>0.26.2</spring.zeebe.starter.version>
@@ -24,6 +32,11 @@
                 <version>${spring.boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.github.ghrocs</groupId>
+                <artifactId>spring-boot-with-starter-zeebe-demo-service-common</artifactId>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.zeebe.spring</groupId>

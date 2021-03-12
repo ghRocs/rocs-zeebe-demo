@@ -5,7 +5,7 @@ import com.github.ghrocs.zeebe.demo.base.domain.CommodityDO;
 import java.math.BigDecimal;
 import java.util.concurrent.ConcurrentHashMap;
 
-/** @author: Rocs Zhang */
+/** @author Rocs Zhang */
 public class CommodityRepository {
 
   // For no-null key value

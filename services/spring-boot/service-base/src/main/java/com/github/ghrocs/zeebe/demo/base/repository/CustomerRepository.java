@@ -4,7 +4,7 @@ import com.github.ghrocs.zeebe.demo.base.domain.CustomerDO;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-/** @author: Rocs Zhang */
+/** @author Rocs Zhang */
 public class CustomerRepository {
 
   // For no-null key value
