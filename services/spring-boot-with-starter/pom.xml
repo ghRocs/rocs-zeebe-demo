@@ -8,7 +8,7 @@
     <packaging>pom</packaging>
     <name>Spring Boot With Starter Zeebe Demo Services</name>
     <modules>
-        <module>service-common</module>
+        <!--<module>service-common</module>-->
         <module>business-service</module>
         <module>inventory-service</module>
         <module>order-service</module>

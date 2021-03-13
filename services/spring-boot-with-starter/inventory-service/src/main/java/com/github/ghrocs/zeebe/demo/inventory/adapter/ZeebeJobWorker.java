@@ -17,11 +17,9 @@ public class ZeebeJobWorker {
 
   @Autowired private IInventoryService inventoryService;
 
-  @ZeebeWorker(
-      type = "deduct-inventory",
-      name = "【Spring Boot With Starter Deduct Inventory】",
-      timeout = 60000L)
+  @ZeebeWorker
   public void handleDeductInventory(final JobClient client, final ActivatedJob job) {
+    log.info("Job handler called by ActivatedJob:{}", job);
     Map<String, Object> variablesMap = job.getVariablesAsMap();
     String commodityCode = (String) variablesMap.get("commodityCode");
     Integer count = (Integer) variablesMap.get("count");

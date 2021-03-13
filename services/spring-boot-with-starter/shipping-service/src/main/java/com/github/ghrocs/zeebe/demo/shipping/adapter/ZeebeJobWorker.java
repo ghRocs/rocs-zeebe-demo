@@ -44,7 +44,7 @@ public class ZeebeJobWorker {
           .errorMessage(defaultException.getMessage())
           .send()
           .join();
-      log.info(
+      log.error(
           "Gone wrong with the ship-commodity Job#{}, due to: {}", job.getKey(), defaultException.getMessage());
     }
   }

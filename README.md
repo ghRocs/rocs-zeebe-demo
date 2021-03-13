@@ -28,11 +28,12 @@
 - 容器引擎：Docker
 - 各个模块开发语言与框架：
 
-| 模块                 | 语言框架版本                                                 | Zeebe 客户端             |
-| -------------------- | ------------------------------------------------------------ | ------------------------ |
-| services/CLI         |                                                              | Zeebe CLI client 0.26.0  |
-| services/spring-boot | Java 11 & OpenJDK 11，Spring Boot 2.4.3，Maven 3.6；Swagger 2.0，SpringFox 3.0.0； | Zeebe Client Java 0.26.0 |
-|                      |                                                              |                          |
+| 模块                              | 语言框架版本                                                 | Zeebe 客户端                       |
+| --------------------------------- | ------------------------------------------------------------ | ---------------------------------- |
+| services/CLI                      | Bash command shell                                           | Zeebe CLI client 0.26.0            |
+| services/spring-boot              | Java 11 & OpenJDK 11，Spring Boot 2.4.3，Maven 3.6；Swagger 2.0，SpringFox 3.0.0 | Zeebe Java Client 0.26.0           |
+| services/spring-boot-with-starter | Java 11 & OpenJDK 11，Spring Boot 2.4.3，Maven 3.6；Swagger 2.0，SpringFox 3.0.0 | Spring Zeebe Client Starter 0.26.2 |
+|                                   |                                                              |                                    |
 
 ## 附演示效果图
 

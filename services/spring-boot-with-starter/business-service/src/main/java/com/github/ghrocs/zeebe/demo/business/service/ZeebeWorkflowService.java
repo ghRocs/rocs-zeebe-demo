@@ -46,6 +46,9 @@ public class ZeebeWorkflowService<I, O> {
     }
   }
 
+  /**
+   * Create and Await the Outcome of a Workflow Instance
+   */
   public void createInstanceWithResult(
       String bpmnProcessId, I variables, StringBuilder wfKeyResultBuilder, O... variablesResult) {
     try {
