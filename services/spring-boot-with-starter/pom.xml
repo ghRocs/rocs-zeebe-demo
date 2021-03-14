@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.ghrocs</groupId>
-    <artifactId>spring-boot-zeebe-demo-services</artifactId>
+    <artifactId>spring-boot-with-starter-zeebe-demo-services</artifactId>
     <version>0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>Spring Boot Zeebe Demo Services</name>
+    <name>Spring Boot With Starter Zeebe Demo Services</name>
     <modules>
-<!--        <module>service-base</module>-->
+        <!--<module>service-common</module>-->
         <module>business-service</module>
         <module>inventory-service</module>
         <module>order-service</module>
@@ -18,7 +17,7 @@
     </modules>
     <properties>
         <spring.boot.version>2.4.3</spring.boot.version>
-        <zeebe.client.version>0.26.0</zeebe.client.version>
+        <spring.zeebe.starter.version>0.26.2</spring.zeebe.starter.version>
         <java.version>11</java.version>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
@@ -28,11 +27,6 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>com.github.ghrocs</groupId>
-                <artifactId>spring-boot-zeebe-demo-service-base</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
                 <version>${spring.boot.version}</version>
@@ -40,9 +34,14 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
-                <groupId>io.zeebe</groupId>
-                <artifactId>zeebe-client-java</artifactId>
-                <version>${zeebe.client.version}</version>
+                <groupId>com.github.ghrocs</groupId>
+                <artifactId>spring-boot-with-starter-zeebe-demo-service-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.zeebe.spring</groupId>
+                <artifactId>spring-zeebe-starter</artifactId>
+                <version>${spring.zeebe.starter.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

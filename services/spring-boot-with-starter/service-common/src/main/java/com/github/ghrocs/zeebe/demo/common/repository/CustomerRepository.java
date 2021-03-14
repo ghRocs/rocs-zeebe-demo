@@ -1,6 +1,6 @@
-package com.github.ghrocs.zeebe.demo.base.repository;
+package com.github.ghrocs.zeebe.demo.common.repository;
 
-import com.github.ghrocs.zeebe.demo.base.domain.CustomerDO;
+import com.github.ghrocs.zeebe.demo.common.domain.CustomerDO;
 
 import java.util.concurrent.ConcurrentHashMap;
 
