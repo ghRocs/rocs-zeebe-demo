@@ -4,7 +4,7 @@ services:
     image: spring-boot-with-starter-zeebe-demo-shipping-service:0.1-SNAPSHOT
     container_name: shipping-service_spring-boot-with-starter
     environment:
-      - ZEEBE.GATEWAY.ADDRESS=zeebe:26500
+      - ZEEBE.CLIENT.BROKER.GATEWAYADDRESS=zeebe:26500
     networks:
       - rzd_network
     tty: true
@@ -12,7 +12,7 @@ services:
     image: spring-boot-with-starter-zeebe-demo-account-service:0.1-SNAPSHOT
     container_name: account-service_spring-boot-with-starter
     environment:
-      - ZEEBE.GATEWAY.ADDRESS=zeebe:26500
+      - ZEEBE.CLIENT.BROKER.GATEWAYADDRESS=zeebe:26500
     networks:
       - rzd_network
     tty: true
@@ -20,7 +20,7 @@ services:
     image: spring-boot-with-starter-zeebe-demo-order-service:0.1-SNAPSHOT
     container_name: order-service_spring-boot-with-starter
     environment:
-      - ZEEBE.GATEWAY.ADDRESS=zeebe:26500
+      - ZEEBE.CLIENT.BROKER.GATEWAYADDRESS=zeebe:26500
     networks:
       - rzd_network
     tty: true
@@ -28,7 +28,7 @@ services:
     image: spring-boot-with-starter-zeebe-demo-inventory-service:0.1-SNAPSHOT
     container_name: inventory-service_spring-boot-with-starter
     environment:
-      - ZEEBE.GATEWAY.ADDRESS=zeebe:26500
+      - ZEEBE.CLIENT.BROKER.GATEWAYADDRESS=zeebe:26500
     networks:
       - rzd_network
     tty: true
@@ -36,7 +36,7 @@ services:
     image: spring-boot-with-starter-zeebe-demo-business-service:0.1-SNAPSHOT
     container_name: business-service_spring-boot-with-starter
     environment:
-      - ZEEBE.GATEWAY.ADDRESS=zeebe:26500
+      - ZEEBE.CLIENT.BROKER.GATEWAYADDRESS=zeebe:26500
     ports:
       - 18080:18080
     networks:
