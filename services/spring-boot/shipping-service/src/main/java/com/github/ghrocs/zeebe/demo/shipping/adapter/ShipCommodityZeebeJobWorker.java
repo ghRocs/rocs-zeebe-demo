@@ -64,7 +64,7 @@ public class ShipCommodityZeebeJobWorker implements JobHandler {
           .errorMessage(defaultException.getMessage())
           .send()
           .join();
-      log.info(
+      log.error(
           "Job handler gone wrong with the Job#{}, due to: {}",
           job.getKey(),
           defaultException.getMessage());
